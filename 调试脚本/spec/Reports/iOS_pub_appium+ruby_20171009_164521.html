@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <title>RSpec results</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Expires" content="-1" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <style type="text/css">
+  body {
+    margin: 0;
+    padding: 0;
+    background: #fff;
+    font-size: 80%;
+  }
+  </style>
+  <script type="text/javascript">
+    // <![CDATA[
+
+function addClass(element_id, classname) {
+  document.getElementById(element_id).className += (" " + classname);
+}
+
+function removeClass(element_id, classname) {
+  var elem = document.getElementById(element_id);
+  var classlist = elem.className.replace(classname,'');
+  elem.className = classlist;
+}
+
+function moveProgressBar(percentDone) {
+  document.getElementById("rspec-header").style.width = percentDone +"%";
+}
+
+function makeRed(element_id) {
+  removeClass(element_id, 'passed');
+  removeClass(element_id, 'not_implemented');
+  addClass(element_id,'failed');
+}
+
+function makeYellow(element_id) {
+  var elem = document.getElementById(element_id);
+  if (elem.className.indexOf("failed") == -1) {  // class doesn't includes failed
+    if (elem.className.indexOf("not_implemented") == -1) { // class doesn't include not_implemented
+      removeClass(element_id, 'passed');
+      addClass(element_id,'not_implemented');
+    }
+  }
+}
+
+function apply_filters() {
+  var passed_filter = document.getElementById('passed_checkbox').checked;
+  var failed_filter = document.getElementById('failed_checkbox').checked;
+  var pending_filter = document.getElementById('pending_checkbox').checked;
+
+  assign_display_style("example passed", passed_filter);
+  assign_display_style("example failed", failed_filter);
+  assign_display_style("example not_implemented", pending_filter);
+
+  assign_display_style_for_group("example_group passed", passed_filter);
+  assign_display_style_for_group("example_group not_implemented", pending_filter, pending_filter || passed_filter);
+  assign_display_style_for_group("example_group failed", failed_filter, failed_filter || pending_filter || passed_filter);
+}
+
+function get_display_style(display_flag) {
+  var style_mode = 'none';
+  if (display_flag == true) {
+    style_mode = 'block';
+  }
+  return style_mode;
+}
+
+function assign_display_style(classname, display_flag) {
+  var style_mode = get_display_style(display_flag);
+  var elems = document.getElementsByClassName(classname)
+  for (var i=0; i<elems.length;i++) {
+    elems[i].style.display = style_mode;
+  }
+}
+
+function assign_display_style_for_group(classname, display_flag, subgroup_flag) {
+  var display_style_mode = get_display_style(display_flag);
+  var subgroup_style_mode = get_display_style(subgroup_flag);
+  var elems = document.getElementsByClassName(classname)
+  for (var i=0; i<elems.length;i++) {
+    var style_mode = display_style_mode;
+    if ((display_flag != subgroup_flag) && (elems[i].getElementsByTagName('dt')[0].innerHTML.indexOf(", ") != -1)) {
+      elems[i].style.display = subgroup_style_mode;
+    } else {
+      elems[i].style.display = display_style_mode;
+    }
+  }
+}
+
+    // ]]>
+  </script>
+  <style type="text/css">
+#rspec-header {
+  background: #65C400; color: #fff; height: 4em;
+}
+
+.rspec-report h1 {
+  margin: 0px 10px 0px 10px;
+  padding: 10px;
+  font-family: "Lucida Grande", Helvetica, sans-serif;
+  font-size: 1.8em;
+  position: absolute;
+}
+
+#label {
+  float:left;
+}
+
+#display-filters {
+  float:left;
+  padding: 28px 0 0 40%;
+  font-family: "Lucida Grande", Helvetica, sans-serif;
+}
+
+#summary {
+  float:right;
+  padding: 5px 10px;
+  font-family: "Lucida Grande", Helvetica, sans-serif;
+  text-align: right;
+}
+
+#summary p {
+  margin: 0 0 0 2px;
+}
+
+#summary #totals {
+  font-size: 1.2em;
+}
+
+.example_group {
+  margin: 0 10px 5px;
+  background: #fff;
+}
+
+dl {
+  margin: 0; padding: 0 0 5px;
+  font: normal 11px "Lucida Grande", Helvetica, sans-serif;
+}
+
+dt {
+  padding: 3px;
+  background: #65C400;
+  color: #fff;
+  font-weight: bold;
+}
+
+dd {
+  margin: 5px 0 5px 5px;
+  padding: 3px 3px 3px 18px;
+}
+
+dd .duration {
+  padding-left: 5px;
+  text-align: right;
+  right: 0px;
+  float:right;
+}
+
+dd.example.passed {
+  border-left: 5px solid #65C400;
+  border-bottom: 1px solid #65C400;
+  background: #DBFFB4; color: #3D7700;
+}
+
+dd.example.not_implemented {
+  border-left: 5px solid #FAF834;
+  border-bottom: 1px solid #FAF834;
+  background: #FCFB98; color: #131313;
+}
+
+dd.example.pending_fixed {
+  border-left: 5px solid #0000C2;
+  border-bottom: 1px solid #0000C2;
+  color: #0000C2; background: #D3FBFF;
+}
+
+dd.example.failed {
+  border-left: 5px solid #C20000;
+  border-bottom: 1px solid #C20000;
+  color: #C20000; background: #FFFBD3;
+}
+
+
+dt.not_implemented {
+  color: #000000; background: #FAF834;
+}
+
+dt.pending_fixed {
+  color: #FFFFFF; background: #C40D0D;
+}
+
+dt.failed {
+  color: #FFFFFF; background: #C40D0D;
+}
+
+
+#rspec-header.not_implemented {
+  color: #000000; background: #FAF834;
+}
+
+#rspec-header.pending_fixed {
+  color: #FFFFFF; background: #C40D0D;
+}
+
+#rspec-header.failed {
+  color: #FFFFFF; background: #C40D0D;
+}
+
+
+.backtrace {
+  color: #000;
+  font-size: 12px;
+}
+
+a {
+  color: #BE5C00;
+}
+
+/* Ruby code, style similar to vibrant ink */
+.ruby {
+  font-size: 12px;
+  font-family: monospace;
+  color: white;
+  background-color: black;
+  padding: 0.1em 0 0.2em 0;
+}
+
+.ruby .keyword { color: #FF6600; }
+.ruby .constant { color: #339999; }
+.ruby .attribute { color: white; }
+.ruby .global { color: white; }
+.ruby .module { color: white; }
+.ruby .class { color: white; }
+.ruby .string { color: #66FF00; }
+.ruby .ident { color: white; }
+.ruby .method { color: #FFCC00; }
+.ruby .number { color: white; }
+.ruby .char { color: white; }
+.ruby .comment { color: #9933CC; }
+.ruby .symbol { color: white; }
+.ruby .regex { color: #44B4CC; }
+.ruby .punct { color: white; }
+.ruby .escape { color: white; }
+.ruby .interp { color: white; }
+.ruby .expr { color: white; }
+
+.ruby .offending { background-color: gray; }
+.ruby .linenum {
+  width: 75px;
+  padding: 0.1em 1em 0.2em 0;
+  color: #000000;
+  background-color: #FFFBD3;
+}
+
+  </style>
+</head>
+<body>
+<div class="rspec-report">
+
+<div id="rspec-header">
+  <div id="label">
+    <h1>RSpec Code Examples</h1>
+  </div>
+
+  <div id="display-filters">
+    <input id="passed_checkbox"  name="passed_checkbox"  type="checkbox" checked="checked" onchange="apply_filters()" value="1" /> <label for="passed_checkbox">Passed</label>
+    <input id="failed_checkbox"  name="failed_checkbox"  type="checkbox" checked="checked" onchange="apply_filters()" value="2" /> <label for="failed_checkbox">Failed</label>
+    <input id="pending_checkbox" name="pending_checkbox" type="checkbox" checked="checked" onchange="apply_filters()" value="3" /> <label for="pending_checkbox">Pending</label>
+  </div>
+
+  <div id="summary">
+    <p id="totals">&#160;</p>
+    <p id="duration">&#160;</p>
+  </div>
+</div>
+
+
+<div class="results">
+<div id="div_group_1" class="example_group passed">
+  <dl style="margin-left: 0px;">
+  <dt id="example_group_1" class="passed">MQTT_iOS_Pub</dt>
+***** ele add_connection_btn found and clicked *****
+***** ele connect_btn found *****
+***** ele sub_topic found *****
+***** ele qos_lever_btn found *****
+***** ele connect_btn clicked *****
+***** MQTT broker connected *****
+***** ele qos_lever_btn found *****
+***** ele pub_topic_btn found *****
+***** ele pub_msg found *****
+***** ele pub_btn found *****
+***** pub_topic modify *****
+***** alert accept *****
+12x XCUIElementTypeOther
+5x XCUIElementTypeButton
+2x XCUIElementTypeWindow
+1x XCUIElementTypeSegmentedControl
+1x XCUIElementTypeTable
+1x XCUIElementTypeStatusBar
+1x XCUIElementTypeTextField
+1x XCUIElementTypeStaticText
+1x XCUIElementTypeApplication
+XCUIElementTypeTextField
+  label: 
+  value: 10.3.93.241
+   visible: false
+XCUIElementTypeTextField
+  label: 
+  value: 10.3.93.241
+   visible: false
+XCUIElementTypeTextField
+  label: 
+  value: 1883
+   visible: false
+XCUIElementTypeTextField
+  label: 
+  value: admin
+   visible: false
+XCUIElementTypeTextField
+  label: 
+  value: public
+   visible: false
+XCUIElementTypeTextField
+  label: 
+  value: Topic
+   visible: false
+XCUIElementTypeTextField
+  label: 
+   visible: true
+
+***** ele pub_msg clear *****
+***** ele pub_msg typed *****
+***** pub_btn clicked *****
+***** pub_topic modify *****
+***** alert accept *****
+29x XCUIElementTypeKey
+19x XCUIElementTypeOther
+9x XCUIElementTypeButton
+3x XCUIElementTypeStaticText
+3x XCUIElementTypeWindow
+1x XCUIElementTypeApplication
+1x XCUIElementTypeCell
+1x XCUIElementTypeTable
+1x XCUIElementTypeKeyboard
+1x XCUIElementTypeStatusBar
+1x XCUIElementTypeSegmentedControl
+1x XCUIElementTypeTextField
+XCUIElementTypeTextField
+  label: 
+  value: 10.3.93.241
+   visible: false
+XCUIElementTypeTextField
+  label: 
+  value: 10.3.93.241
+   visible: false
+XCUIElementTypeTextField
+  label: 
+  value: 1883
+   visible: false
+XCUIElementTypeTextField
+  label: 
+  value: admin
+   visible: false
+XCUIElementTypeTextField
+  label: 
+  value: public
+   visible: false
+XCUIElementTypeTextField
+  label: 
+  value: Topic
+   visible: false
+XCUIElementTypeTextField
+  label: 
+   visible: true
+
+***** ele pub_msg clear *****
+***** ele pub_msg typed *****
+***** pub_btn clicked *****
+***** pub_topic modify *****
+***** alert accept *****
+29x XCUIElementTypeKey
+19x XCUIElementTypeOther
+9x XCUIElementTypeButton
+5x XCUIElementTypeStaticText
+3x XCUIElementTypeWindow
+2x XCUIElementTypeCell
+1x XCUIElementTypeTable
+1x XCUIElementTypeKeyboard
+1x XCUIElementTypeTextField
+1x XCUIElementTypeSegmentedControl
+1x XCUIElementTypeApplication
+1x XCUIElementTypeStatusBar
+XCUIElementTypeTextField
+  label: 
+  value: 10.3.93.241
+   visible: false
+XCUIElementTypeTextField
+  label: 
+  value: 10.3.93.241
+   visible: false
+XCUIElementTypeTextField
+  label: 
+  value: 1883
+   visible: false
+XCUIElementTypeTextField
+  label: 
+  value: admin
+   visible: false
+XCUIElementTypeTextField
+  label: 
+  value: public
+   visible: false
+XCUIElementTypeTextField
+  label: 
+  value: Topic
+   visible: false
+XCUIElementTypeTextField
+  label: 
+   visible: true
+
+***** ele pub_msg clear *****
+***** ele pub_msg typed *****
+***** pub_btn clicked *****
+***** pub_topic modify *****
+***** alert accept *****
+29x XCUIElementTypeKey
+19x XCUIElementTypeOther
+9x XCUIElementTypeButton
+7x XCUIElementTypeStaticText
+3x XCUIElementTypeCell
+3x XCUIElementTypeWindow
+1x XCUIElementTypeTable
+1x XCUIElementTypeKeyboard
+1x XCUIElementTypeTextField
+1x XCUIElementTypeSegmentedControl
+1x XCUIElementTypeApplication
+1x XCUIElementTypeStatusBar
+XCUIElementTypeTextField
+  label: 
+  value: 10.3.93.241
+   visible: false
+XCUIElementTypeTextField
+  label: 
+  value: 10.3.93.241
+   visible: false
+XCUIElementTypeTextField
+  label: 
+  value: 1883
+   visible: false
+XCUIElementTypeTextField
+  label: 
+  value: admin
+   visible: false
+XCUIElementTypeTextField
+  label: 
+  value: public
+   visible: false
+XCUIElementTypeTextField
+  label: 
+  value: Topic
+   visible: false
+XCUIElementTypeTextField
+  label: 
+   visible: true
+
+***** ele pub_msg clear *****
+***** ele pub_msg typed *****
+***** pub_btn clicked *****
+***** pub_topic modify *****
+***** alert accept *****
+29x XCUIElementTypeKey
+20x XCUIElementTypeOther
+9x XCUIElementTypeStaticText
+9x XCUIElementTypeButton
+4x XCUIElementTypeCell
+3x XCUIElementTypeWindow
+1x XCUIElementTypeSegmentedControl
+1x XCUIElementTypeApplication
+1x XCUIElementTypeTable
+1x XCUIElementTypeKeyboard
+1x XCUIElementTypeStatusBar
+1x XCUIElementTypeTextField
+XCUIElementTypeTextField
+  label: 
+  value: 10.3.93.241
+   visible: false
+XCUIElementTypeTextField
+  label: 
+  value: 10.3.93.241
+   visible: false
+XCUIElementTypeTextField
+  label: 
+  value: 1883
+   visible: false
+XCUIElementTypeTextField
+  label: 
+  value: admin
+   visible: false
+XCUIElementTypeTextField
+  label: 
+  value: public
+   visible: false
+XCUIElementTypeTextField
+  label: 
+  value: Topic
+   visible: false
+XCUIElementTypeTextField
+  label: 
+   visible: true
+
+***** ele pub_msg clear *****
+***** ele pub_msg typed *****
+***** pub_btn clicked *****
+***** pub_topic modify *****
+***** alert accept *****
+29x XCUIElementTypeKey
+25x XCUIElementTypeOther
+11x XCUIElementTypeStaticText
+10x XCUIElementTypeButton
+5x XCUIElementTypeCell
+3x XCUIElementTypeWindow
+1x XCUIElementTypeTable
+1x XCUIElementTypeKeyboard
+1x XCUIElementTypeStatusBar
+1x XCUIElementTypeSegmentedControl
+1x XCUIElementTypeApplication
+1x XCUIElementTypeTextField
+XCUIElementTypeTextField
+  label: 
+  value: 10.3.93.241
+   visible: false
+XCUIElementTypeTextField
+  label: 
+  value: 10.3.93.241
+   visible: false
+XCUIElementTypeTextField
+  label: 
+  value: 1883
+   visible: false
+XCUIElementTypeTextField
+  label: 
+  value: admin
+   visible: false
+XCUIElementTypeTextField
+  label: 
+  value: public
+   visible: false
+XCUIElementTypeTextField
+  label: 
+  value: Topic
+   visible: false
+XCUIElementTypeTextField
+  label: 
+   visible: true
+
+***** ele pub_msg clear *****
+***** ele pub_msg typed *****
+***** pub_btn clicked *****
+***** pub_topic modify *****
+***** alert accept *****
+29x XCUIElementTypeKey
+19x XCUIElementTypeOther
+13x XCUIElementTypeStaticText
+9x XCUIElementTypeButton
+6x XCUIElementTypeCell
+3x XCUIElementTypeWindow
+1x XCUIElementTypeStatusBar
+1x XCUIElementTypeTable
+1x XCUIElementTypeKeyboard
+1x XCUIElementTypeSegmentedControl
+1x XCUIElementTypeApplication
+1x XCUIElementTypeTextField
+XCUIElementTypeTextField
+  label: 
+  value: 10.3.93.241
+   visible: false
+XCUIElementTypeTextField
+  label: 
+  value: 10.3.93.241
+   visible: false
+XCUIElementTypeTextField
+  label: 
+  value: 1883
+   visible: false
+XCUIElementTypeTextField
+  label: 
+  value: admin
+   visible: false
+XCUIElementTypeTextField
+  label: 
+  value: public
+   visible: false
+XCUIElementTypeTextField
+  label: 
+  value: Topic
+   visible: false
+XCUIElementTypeTextField
+  label: 
+   visible: true
+
+***** ele pub_msg clear *****
+***** ele pub_msg typed *****
+***** pub_btn clicked *****
+***** pub_topic modify *****
+***** alert accept *****
+29x XCUIElementTypeKey
+20x XCUIElementTypeOther
+13x XCUIElementTypeStaticText
+9x XCUIElementTypeButton
+6x XCUIElementTypeCell
+3x XCUIElementTypeWindow
+1x XCUIElementTypeStatusBar
+1x XCUIElementTypeTable
+1x XCUIElementTypeKeyboard
+1x XCUIElementTypeSegmentedControl
+1x XCUIElementTypeApplication
+1x XCUIElementTypeTextField
+XCUIElementTypeTextField
+  label: 
+  value: 10.3.93.241
+   visible: false
+XCUIElementTypeTextField
+  label: 
+  value: 10.3.93.241
+   visible: false
+XCUIElementTypeTextField
+  label: 
+  value: 1883
+   visible: false
+XCUIElementTypeTextField
+  label: 
+  value: admin
+   visible: false
+XCUIElementTypeTextField
+  label: 
+  value: public
+   visible: false
+XCUIElementTypeTextField
+  label: 
+  value: Topic
+   visible: false
+XCUIElementTypeTextField
+  label: 
+   visible: true
+
+***** ele pub_msg clear *****
+***** ele pub_msg typed *****
+***** pub_btn clicked *****
+***** pub_topic modify *****
+***** alert accept *****
+29x XCUIElementTypeKey
+19x XCUIElementTypeOther
+13x XCUIElementTypeStaticText
+9x XCUIElementTypeButton
+6x XCUIElementTypeCell
+3x XCUIElementTypeWindow
+1x XCUIElementTypeStatusBar
+1x XCUIElementTypeTable
+1x XCUIElementTypeKeyboard
+1x XCUIElementTypeSegmentedControl
+1x XCUIElementTypeApplication
+1x XCUIElementTypeTextField
+XCUIElementTypeTextField
+  label: 
+  value: 10.3.93.241
+   visible: false
+XCUIElementTypeTextField
+  label: 
+  value: 10.3.93.241
+   visible: false
+XCUIElementTypeTextField
+  label: 
+  value: 1883
+   visible: false
+XCUIElementTypeTextField
+  label: 
+  value: admin
+   visible: false
+XCUIElementTypeTextField
+  label: 
+  value: public
+   visible: false
+XCUIElementTypeTextField
+  label: 
+  value: Topic
+   visible: false
+XCUIElementTypeTextField
+  label: 
+   visible: true
+
+***** ele pub_msg clear *****
+***** ele pub_msg typed *****
+***** pub_btn clicked *****
+***** pub_topic modify *****
+***** alert accept *****
+29x XCUIElementTypeKey
+19x XCUIElementTypeOther
+13x XCUIElementTypeStaticText
+9x XCUIElementTypeButton
+6x XCUIElementTypeCell
+3x XCUIElementTypeWindow
+1x XCUIElementTypeStatusBar
+1x XCUIElementTypeTable
+1x XCUIElementTypeKeyboard
+1x XCUIElementTypeSegmentedControl
+1x XCUIElementTypeApplication
+1x XCUIElementTypeTextField
+XCUIElementTypeTextField
+  label: 
+  value: 10.3.93.241
+   visible: false
+XCUIElementTypeTextField
+  label: 
+  value: 10.3.93.241
+   visible: false
+XCUIElementTypeTextField
+  label: 
+  value: 1883
+   visible: false
+XCUIElementTypeTextField
+  label: 
+  value: admin
+   visible: false
+XCUIElementTypeTextField
+  label: 
+  value: public
+   visible: false
+XCUIElementTypeTextField
+  label: 
+  value: Topic
+   visible: false
+XCUIElementTypeTextField
+  label: 
+   visible: true
+
+***** ele pub_msg clear *****
+***** ele pub_msg typed *****
+***** pub_btn clicked *****
+    <script type="text/javascript">moveProgressBar('100.0');</script>
+    <dd class="example passed"><span class="passed_spec_name">pub_topic_iOS</span><span class='duration'>229.54770s</span></dd>
+  </dl>
+</div>
+<script type="text/javascript">document.getElementById('duration').innerHTML = "Finished in <strong>246.83614 seconds</strong>";</script>
+<script type="text/javascript">document.getElementById('totals').innerHTML = "1 example, 0 failures";</script>
+</div>
+</div>
+</body>
+</html>
+('logging: ', 'Sending CONNECT (u1, p1, wr0, wq0, wf1, c1, k60) client_id=7LDxDCldbGQxB7IPPe3Ofo')
+('logging: ', 'Received CONNACK (0, 0)')
+Connect received of code 0.
+('logging: ', 'Received SUBACK')
+Subscribed topic: 1 (1,)
+('logging: ', "Received PUBLISH (d0, q1, r0, m1), 'mqtt/iOS/pub/PuSz', ...  (8 bytes)")
+('logging: ', 'Sending PUBACK (Mid: 1)')
+('message topic=', 'mqtt/iOS/pub/PuSz')
+('message received ', '1 Degree')
+('message qos=', 1)
+('message retain flag=', 0)
+('logging: ', "Received PUBLISH (d0, q1, r0, m2), 'mqtt/iOS/pub/vZFd', ...  (8 bytes)")
+('logging: ', 'Sending PUBACK (Mid: 2)')
+('message topic=', 'mqtt/iOS/pub/vZFd')
+('message received ', '2 Degree')
+('message qos=', 1)
+('message retain flag=', 0)
+('logging: ', "Received PUBLISH (d0, q1, r0, m3), 'mqtt/iOS/pub/22ZS', ...  (8 bytes)")
+('logging: ', 'Sending PUBACK (Mid: 3)')
+('message topic=', 'mqtt/iOS/pub/22ZS')
+('message received ', '3 Degree')
+('message qos=', 1)
+('message retain flag=', 0)
+('logging: ', "Received PUBLISH (d0, q1, r0, m4), 'mqtt/iOS/pub/sUze', ...  (8 bytes)")
+('logging: ', 'Sending PUBACK (Mid: 4)')
+('message topic=', 'mqtt/iOS/pub/sUze')
+('message received ', '4 Degree')
+('message qos=', 1)
+('message retain flag=', 0)
+('logging: ', "Received PUBLISH (d0, q1, r0, m5), 'mqtt/iOS/pub/sRSz', ...  (8 bytes)")
+('logging: ', 'Sending PUBACK (Mid: 5)')
+('message topic=', 'mqtt/iOS/pub/sRSz')
+('message received ', '5 Degree')
+('message qos=', 1)
+('message retain flag=', 0)
+('logging: ', "Received PUBLISH (d0, q1, r0, m6), 'mqtt/iOS/pub/oDdp', ...  (8 bytes)")
+('logging: ', 'Sending PUBACK (Mid: 6)')
+('message topic=', 'mqtt/iOS/pub/oDdp')
+('message received ', '6 Degree')
+('message qos=', 1)
+('message retain flag=', 0)
+('logging: ', "Received PUBLISH (d0, q1, r0, m7), 'mqtt/iOS/pub/yveM', ...  (8 bytes)")
+('logging: ', 'Sending PUBACK (Mid: 7)')
+('message topic=', 'mqtt/iOS/pub/yveM')
+('message received ', '7 Degree')
+('message qos=', 1)
+('message retain flag=', 0)
+('logging: ', "Received PUBLISH (d0, q1, r0, m8), 'mqtt/iOS/pub/cSAA', ...  (8 bytes)")
+('logging: ', 'Sending PUBACK (Mid: 8)')
+('message topic=', 'mqtt/iOS/pub/cSAA')
+('message received ', '8 Degree')
+('message qos=', 1)
+('message retain flag=', 0)
+('logging: ', "Received PUBLISH (d0, q1, r0, m9), 'mqtt/iOS/pub/nwBa', ...  (8 bytes)")
+('logging: ', 'Sending PUBACK (Mid: 9)')
+('message topic=', 'mqtt/iOS/pub/nwBa')
+('message received ', '9 Degree')
+('message qos=', 1)
+('message retain flag=', 0)
+('logging: ', "Received PUBLISH (d0, q1, r0, m10), 'mqtt/iOS/pub/FEMU', ...  (9 bytes)")
+('logging: ', 'Sending PUBACK (Mid: 10)')
+('message topic=', 'mqtt/iOS/pub/FEMU')
+('message received ', '10 Degree')
+('message qos=', 1)
+('message retain flag=', 0)
+('logging: ', "Received PUBLISH (d0, q1, r0, m11), 'mqtt/iOS/pub/naDa/', ...  (8 bytes)")
+('logging: ', 'Sending PUBACK (Mid: 11)')
+('message topic=', 'mqtt/iOS/pub/naDa/')
+('message received ', '1 Degree')
+('message qos=', 1)
+('message retain flag=', 0)
+('logging: ', "Received PUBLISH (d0, q1, r0, m12), 'mqtt/iOS/pub/BWb4/', ...  (8 bytes)")
+('logging: ', 'Sending PUBACK (Mid: 12)')
+('message topic=', 'mqtt/iOS/pub/BWb4/')
+('message received ', '2 Degree')
+('message qos=', 1)
+('message retain flag=', 0)
+('logging: ', "Received PUBLISH (d0, q1, r0, m13), 'mqtt/iOS/pub/1xAr/', ...  (8 bytes)")
+('logging: ', 'Sending PUBACK (Mid: 13)')
+('message topic=', 'mqtt/iOS/pub/1xAr/')
+('message received ', '3 Degree')
+('message qos=', 1)
+('message retain flag=', 0)
+('logging: ', "Received PUBLISH (d0, q1, r0, m14), 'mqtt/iOS/pub/F6wm/', ...  (8 bytes)")
+('logging: ', 'Sending PUBACK (Mid: 14)')
+('message topic=', 'mqtt/iOS/pub/F6wm/')
+('message received ', '4 Degree')
+('message qos=', 1)
+('message retain flag=', 0)
+('logging: ', "Received PUBLISH (d0, q1, r0, m15), 'mqtt/iOS/pub/l6yL/', ...  (8 bytes)")
+('logging: ', 'Sending PUBACK (Mid: 15)')
+('message topic=', 'mqtt/iOS/pub/l6yL/')
+('message received ', '5 Degree')
+('message qos=', 1)
+('message retain flag=', 0)
+('logging: ', "Received PUBLISH (d0, q1, r0, m16), 'mqtt/iOS/pub/fBjG/', ...  (8 bytes)")
+('logging: ', 'Sending PUBACK (Mid: 16)')
+('message topic=', 'mqtt/iOS/pub/fBjG/')
+('message received ', '6 Degree')
+('message qos=', 1)
+('message retain flag=', 0)
+('logging: ', "Received PUBLISH (d0, q1, r0, m17), 'mqtt/iOS/pub/Qv3a/', ...  (8 bytes)")
+('logging: ', 'Sending PUBACK (Mid: 17)')
+('message topic=', 'mqtt/iOS/pub/Qv3a/')
+('message received ', '7 Degree')
+('message qos=', 1)
+('message retain flag=', 0)
+('logging: ', "Received PUBLISH (d0, q1, r0, m18), 'mqtt/iOS/pub/nFaU/', ...  (8 bytes)")
+('logging: ', 'Sending PUBACK (Mid: 18)')
+('message topic=', 'mqtt/iOS/pub/nFaU/')
+('message received ', '8 Degree')
+('message qos=', 1)
+('message retain flag=', 0)
+('logging: ', "Received PUBLISH (d0, q1, r0, m19), 'mqtt/iOS/pub/nbnY/', ...  (8 bytes)")
+('logging: ', 'Sending PUBACK (Mid: 19)')
+('message topic=', 'mqtt/iOS/pub/nbnY/')
+('message received ', '9 Degree')
+('message qos=', 1)
+('message retain flag=', 0)
+('logging: ', "Received PUBLISH (d0, q1, r0, m20), 'mqtt/iOS/pub/eXq8/', ...  (9 bytes)")
+('logging: ', 'Sending PUBACK (Mid: 20)')
+('message topic=', 'mqtt/iOS/pub/eXq8/')
+('message received ', '10 Degree')
+('message qos=', 1)
+('message retain flag=', 0)
+('logging: ', "Received PUBLISH (d0, q1, r0, m21), 'mqtt/iOS/pub/Tftn/', ...  (9 bytes)")
+('logging: ', 'Sending PUBACK (Mid: 21)')
+('message topic=', 'mqtt/iOS/pub/Tftn/')
+('message received ', '11 Degree')
+('message qos=', 1)
+('message retain flag=', 0)
+('logging: ', "Received PUBLISH (d0, q1, r0, m22), 'mqtt/iOS/pub/h4P5/', ...  (9 bytes)")
+('logging: ', 'Sending PUBACK (Mid: 22)')
+('message topic=', 'mqtt/iOS/pub/h4P5/')
+('message received ', '12 Degree')
+('message qos=', 1)
+('message retain flag=', 0)
+('logging: ', "Received PUBLISH (d0, q1, r0, m23), 'mqtt/iOS/pub/3tIs/', ...  (9 bytes)")
+('logging: ', 'Sending PUBACK (Mid: 23)')
+('message topic=', 'mqtt/iOS/pub/3tIs/')
+('message received ', '13 Degree')
+('message qos=', 1)
+('message retain flag=', 0)
+('logging: ', "Received PUBLISH (d0, q1, r0, m24), 'mqtt/iOS/pub/dFMP/', ...  (9 bytes)")
+('logging: ', 'Sending PUBACK (Mid: 24)')
+('message topic=', 'mqtt/iOS/pub/dFMP/')
+('message received ', '14 Degree')
+('message qos=', 1)
+('message retain flag=', 0)
+('logging: ', "Received PUBLISH (d0, q1, r0, m25), 'mqtt/iOS/pub/A19A/', ...  (9 bytes)")
+('logging: ', 'Sending PUBACK (Mid: 25)')
+('message topic=', 'mqtt/iOS/pub/A19A/')
+('message received ', '15 Degree')
+('message qos=', 1)
+('message retain flag=', 0)
+('logging: ', "Received PUBLISH (d0, q1, r0, m26), 'mqtt/iOS/pub/Giq5/', ...  (9 bytes)")
+('logging: ', 'Sending PUBACK (Mid: 26)')
+('message topic=', 'mqtt/iOS/pub/Giq5/')
+('message received ', '16 Degree')
+('message qos=', 1)
+('message retain flag=', 0)
+('logging: ', "Received PUBLISH (d0, q1, r0, m27), 'mqtt/iOS/pub/Z838/', ...  (9 bytes)")
+('logging: ', 'Sending PUBACK (Mid: 27)')
+('message topic=', 'mqtt/iOS/pub/Z838/')
+('message received ', '17 Degree')
+('message qos=', 1)
+('message retain flag=', 0)
+('logging: ', "Received PUBLISH (d0, q1, r0, m28), 'mqtt/iOS/pub/KVor/', ...  (9 bytes)")
+('logging: ', 'Sending PUBACK (Mid: 28)')
+('message topic=', 'mqtt/iOS/pub/KVor/')
+('message received ', '18 Degree')
+('message qos=', 1)
+('message retain flag=', 0)
+('logging: ', "Received PUBLISH (d0, q1, r0, m29), 'mqtt/iOS/pub/KHgd/', ...  (9 bytes)")
+('logging: ', 'Sending PUBACK (Mid: 29)')
+('message topic=', 'mqtt/iOS/pub/KHgd/')
+('message received ', '19 Degree')
+('message qos=', 1)
+('message retain flag=', 0)
+('logging: ', "Received PUBLISH (d0, q1, r0, m30), 'mqtt/iOS/pub/lGjR/', ...  (9 bytes)")
+('logging: ', 'Sending PUBACK (Mid: 30)')
+('message topic=', 'mqtt/iOS/pub/lGjR/')
+('message received ', '20 Degree')
+('message qos=', 1)
+('message retain flag=', 0)
+('logging: ', 'Sending PINGREQ')
+('logging: ', 'Received PINGRESP')
+('logging: ', 'Sending PINGREQ')
+('logging: ', 'Received PINGRESP')
+('logging: ', 'Sending PINGREQ')
+('logging: ', 'Received PINGRESP')
+('logging: ', 'Sending PINGREQ')
+('logging: ', 'Received PINGRESP')
+('logging: ', 'Sending PINGREQ')
+('logging: ', 'Received PINGRESP')
+('

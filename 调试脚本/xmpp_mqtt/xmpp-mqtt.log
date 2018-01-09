@@ -1,0 +1,37 @@
+fa5940c1f3c543a7{"getTemperature": {"action": "INVOKE_SDK_FUNCTION", "functions": [{"ParameterList": [], "name": "getSyncAcStatus"}]}}
+('logging: ', 'Sending CONNECT (u1, p1, wr0, wq0, wf0, c1, k60) client_id=a:fa5940c1f3c543a7')
+('logging: ', "Sending PUBLISH (d0, q1, r0, m1), 'd/D3A80000361234512345DHDH/i', ... (135 bytes)")
+('logging: ', 'Received CONNACK (0, 0)')
+Connect received of code 0.
+Client connected success
+('logging: ', 'Received PUBACK (Mid: 1)')
+Publish to topic: 1
+Query topic from APP published done!
+([SSL: DECRYPTION_FAILED_OR_BAD_RECORD_MAC] decryption failed or bad record mac (_ssl.c:1752)'logging: ', "Rec
+eived PUBLISH (d0, q1, r0, m1), 'a/fa5940c1f3c543a7/s', ...  (573 bytes)"Disconnect received of code 1.)
+
+('loggiClient disconnect FAILng
+: ', 'Sending PUBACK (Mid: 1)')
+('message topic=', u'a/fa5940c1f3c543a7/s')
+('message received ', '{"sn":"D3A80000361234512345DHDH","payload":"{\\"msgtype\\":\\"reportstatus\\",\\"resultcode\\":\\"done\\",\\"from\\":\\"D3A80000361234512345DHDH\\", \\"devtype\\":\\"1281\\",\\"target\\":\\"fa5940c1f3c543a7\\", \\"ac0x0001\\":\\"0\\",\\"ac0x0501\\":\\"0\\",\\"ac0x0502\\":\\"24.0\\",\\"ac0x0503\\":\\"3\\",\\"ac0x0504\\":\\"0\\",\\"ac0x0505\\":\\"0\\",\\"ac0x0506\\":\\"0\\",\\"ac0x0507\\":\\"0\\",\\"ac0x0508\\":\\"0\\",\\"ac0x0509\\":\\"0\\",\\"ac0x050B\\":\\"0\\",\\"ac0x050C\\":\\"0\\",\\"ac0x050D\\":\\"0\\",\\"ac0x050E\\":\\"0\\",\\"ac0x052F\\":\\"1.0.2\\",\\"ac0x0510\\":\\"22.9\\",\\"ac0x0518\\":\\"-50.0\\",\\"soctype\\":\\"8\\",\\"ac0x0539\\":\\"8000036\\"}"}')
+('message qos=', 1)
+('message retain flag=', 0)
+('logging: ', 'Sending CONNECT (u1, p1, wr0, wq0, wf0, c1, k60) client_id=a:fa5940c1f3c543a7')
+('logging: ', 'Received CONNACK (0, 0)')
+Connect received of code 0.
+Client connected success
+('logging: ', 'Sending CONNECT (u1, p1, wr0, wq0, wf0, c1, k60) client_id=a:fa5940c1f3c543a7')
+('logging: ', 'Received CONNACK (0, 0)')
+Connect received of code 0.
+Client connected success
+('logging: ', "Received PUBLISH (d0, q1, r0, m1), 'a/fa5940c1f3c543a7/s', ...  (39 bytes)")
+('logging: ', 'Sending PUBACK (Mid: 1)')
+('message topic=', u'a/fa5940c1f3c543a7/s')
+('message received ', '{"sn":"D3A80000361234512345DHDH","s":1}')
+('message qos=', 1)
+('message retain flag=', 0)
+('logging: ', 'Sending CONNECT (u1, p1, wr0, wq0, wf0, c1, k60) client_id=a:fa5940c1f3c543a7')
+('logging: ', 'Received CONNACK (0, 0)')
+Connect received of code 0.
+Client connected success
+[Cancelled]

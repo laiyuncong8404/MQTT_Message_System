@@ -1,0 +1,14 @@
+[caps]
+app = "/Users/xiaoxue/Documents/SSC_长虹软服中心/项目文档/2017/UP平台二期-MQTT消息系统/调试脚本/apps/com.changhong.emqx_debug.app"
+noReset = false
+fullReset = false
+platformName = "iOS"
+platformVersion = "10.3.1"
+deviceName = "iPhone 6"
+udid = "78973E12-B4CB-460E-A223-904AC41704B4"
+
+
+[appium_lib]
+require = ["./spec_helper.rb"]
+port = "4723"
+wait_timeout = "60"
